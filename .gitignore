@@ -1,0 +1,29 @@
+# Бинарные файлы, скомпилированные артефакты
+/bin/
+/build/
+main
+
+# Файлы зависимостей Go
+/vendor/
+
+# Файлы настроек IDE
+.idea/
+*.sublime-workspace
+*.sublime-project
+.vscode/
+
+# Логи
+*.log
+
+# Файлы системы
+.DS_Store
+Thumbs.db
+
+# Файлы окружения
+.env
+
+# Файлы Docker
+docker-compose.override.yml
+
+# Кэш сборки
+/tmp/
