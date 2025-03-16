@@ -1,14 +1,22 @@
 version: '3.8'
 
 services:
-  app:
-    build: .
+  backend:
+    build: ./myapp
     restart: always
     ports:
       - "${APP_PORT}:${APP_PORT}"
     env_file: .env
     depends_on:
       - db
+
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
 
   db:
     image: postgres:17-alpine
