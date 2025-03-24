@@ -21,7 +21,7 @@ func Load() *Config {
 		log.Fatal("Не заданы необходимые переменные окружения: DATABASE_URL, JWT_SECRET")
 	}
 	if cfg.Port == "" {
-		cfg.Port = "8080"
+		cfg.Port = "8888"
 	}
 	return cfg
 }
