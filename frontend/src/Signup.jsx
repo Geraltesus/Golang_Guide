@@ -1,39 +1,67 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-const Signup = () => {
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
-	const history = useNavigate();
+function Signup() {
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [message, setMessage] = useState('');
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		try {
-			await axios.post('http://localhost:8080/signup', { username, password });
-			history.push('/login');
-		} catch (error) {
-			console.error(error);
-		}
-	};
+  const handleChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
 
-	return (
-		<form onSubmit={handleSubmit}>
-			<input
-				type="text"
-				placeholder="Username"
-				value={username}
-				onChange={(e) => setUsername(e.target.value)}
-			/>
-			<input
-				type="password"
-				placeholder="Password"
-				value={password}
-				onChange={(e) => setPassword(e.target.value)}
-			/>
-			<button type="submit">Sign Up</button>
-		</form>
-	);
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:8080/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+      if (response.ok) {
+        await response.json();
+        setMessage('Регистрация прошла успешно!');
+      } else {
+        setMessage('Ошибка регистрации');
+      }
+    } catch (error) {
+      console.error('Ошибка:', error);
+      setMessage('Произошла ошибка');
+    }
+  };
+
+  return (
+    <div className="container">
+      <h2>Регистрация</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Электронная почта:</label>
+          <input 
+            type="email" 
+            name="username" 
+            value={formData.username} 
+            onChange={handleChange} 
+            required 
+          />
+        </div>
+        <div className="form-group">
+          <label>Пароль:</label>
+          <input 
+            type="password" 
+            name="password" 
+            value={formData.password} 
+            onChange={handleChange} 
+            required 
+          />
+        </div>
+        <button type="submit" className="button">Зарегистрироваться</button>
+      </form>
+      {message && <p className="message">{message}</p>}
+    </div>
+  );
+}
 
 export default Signup;

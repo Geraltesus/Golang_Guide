@@ -1,20 +1,26 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Signup from './Signup';
 import Login from './Login';
 import Guide from './Guide';
+import CodeDisplay from './CodeDisplay';
 
-const App = () => {
-	return (
-		<Router>
-			<Routes>
-				<Route path="/signup" component={Signup} />
-				<Route path="/login" component={Login} />
-				<Route path="/guide" component={Guide} />
-				<Route path="/" exact component={Login} />
-			</Routes>
-		</Router>
-	);
-};
+function App() {
+  return (
+    <Router>
+      <div>
+        <nav>
+          <Link to="/">Главная</Link> | <Link to="/signup">Регистрация</Link> | <Link to="/login">Вход</Link> | <Link to="/code">Код</Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={<Guide />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/code" element={<CodeDisplay />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
 
 export default App;
