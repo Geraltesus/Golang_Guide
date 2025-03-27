@@ -15,6 +15,7 @@ type UserUsecase interface {
 	Register(username, password, fullName string) error
 	Login(username, password string) (string, error)
 	GetProfile(userID int64) (*models.User, error)
+	Logout(userID int64) error
 }
 
 type userUsecase struct {
@@ -73,4 +74,9 @@ func (uc *userUsecase) Login(username, password string) (string, error) {
 
 func (uc *userUsecase) GetProfile(userID int64) (*models.User, error) {
 	return uc.userRepo.GetUserByID(userID)
+}
+
+func (uc *userUsecase) Logout(userID int64) error {
+	// Простой вариант: ничего не делаем и возвращаем nil.
+	return nil
 }

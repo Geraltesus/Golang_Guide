@@ -141,3 +141,36 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+// Logout – обработчик для выхода пользователя
+func (h *Handler) Logout(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+	var uid int64
+	switch id := userID.(type) {
+	case float64:
+		uid = int64(id)
+	case int64:
+		uid = id
+	case string:
+		var err error
+		uid, err = strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "некорректный user_id в токене"})
+			return
+		}
+	default:
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "некорректный тип user_id в токене"})
+		return
+	}
+
+	// В данном случае просто вызываем usecase.Logout, который ничего не делает
+	if err := h.userUsecase.Logout(uid); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "не удалось выйти"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "вы успешно вышли из системы"})
+}

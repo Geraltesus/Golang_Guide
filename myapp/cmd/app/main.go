@@ -51,6 +51,7 @@ func main() {
 	protected := router.Group("/")
 	protected.Use(httpDelivery.AuthMiddleware(cfg.JWTSecret))
 	protected.GET("/profile", handler.Profile)
+	protected.POST("/logout", handler.Logout)
 
 	log.Println("Сервер запущен на порту", cfg.Port)
 	router.Run(":" + cfg.Port)
