@@ -2,51 +2,46 @@ package repository
 
 import (
 	"database/sql"
-	domain "golang-guide/internal/entities"
+	"golang-guide/internal/models"
 )
+
+type UserRepository interface {
+	CreateUser(user *models.User) error
+	GetUserByUsername(username string) (*models.User, error)
+	GetUserByID(id int64) (*models.User, error)
+}
 
 type userRepository struct {
 	db *sql.DB
 }
 
-func NewUserRepository(db *sql.DB) domain.UserRepository {
+func NewUserRepository(db *sql.DB) UserRepository {
 	return &userRepository{db: db}
 }
 
-func (r *userRepository) Create(user *domain.User) (int, error) {
-	var id int
-	err := r.db.QueryRow(
-		"INSERT INTO users (username, password_hash) VALUES ($1, $2) RETURNING id",
-		user.Username, user.PasswordHash,
-	).Scan(&id)
-	if err != nil {
-		return 0, err
-	}
-	return id, nil
+func (r *userRepository) CreateUser(user *models.User) error {
+	query := `INSERT INTO users (username, password_hash, created_at, full_name) 
+	          VALUES ($1, $2, $3, $4) RETURNING id`
+	err := r.db.QueryRow(query, user.Username, user.PasswordHash, user.CreatedAt, user.FullName).Scan(&user.ID)
+	return err
 }
 
-func (r *userRepository) GetByUsername(username string) (*domain.User, error) {
-	var user domain.User
-	err := r.db.QueryRow("SELECT id, username, password_hash FROM users WHERE username=$1", username).
-		Scan(&user.ID, &user.Username, &user.PasswordHash)
-	if err == sql.ErrNoRows {
-		return nil, nil
-	}
+func (r *userRepository) GetUserByUsername(username string) (*models.User, error) {
+	user := &models.User{}
+	query := `SELECT id, username, password_hash, created_at, full_name FROM users WHERE username = $1`
+	err := r.db.QueryRow(query, username).Scan(&user.ID, &user.Username, &user.PasswordHash, &user.CreatedAt, &user.FullName)
 	if err != nil {
 		return nil, err
 	}
-	return &user, nil
+	return user, nil
 }
 
-func (r *userRepository) GetByID(id int) (*domain.User, error) {
-	var user domain.User
-	err := r.db.QueryRow("SELECT id, username, password_hash FROM users WHERE id=$1", id).
-		Scan(&user.ID, &user.Username, &user.PasswordHash)
-	if err == sql.ErrNoRows {
-		return nil, nil
-	}
+func (r *userRepository) GetUserByID(id int64) (*models.User, error) {
+	user := &models.User{}
+	query := `SELECT id, username, password_hash, created_at, full_name FROM users WHERE id = $1`
+	err := r.db.QueryRow(query, id).Scan(&user.ID, &user.Username, &user.PasswordHash, &user.CreatedAt, &user.FullName)
 	if err != nil {
 		return nil, err
 	}
-	return &user, nil
+	return user, nil
 }

@@ -2,40 +2,40 @@ package main
 
 import (
 	"database/sql"
+	"log"
+	"time"
+
 	"golang-guide/internal/config"
 	httpDelivery "golang-guide/internal/delivery/http"
 	"golang-guide/internal/repository"
 	"golang-guide/internal/usecase"
-	"log"
-	"time"
 
 	"github.com/gin-contrib/cors"
-
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 )
 
 func main() {
-	// Load configuration
+	// Загрузка конфигурации
 	cfg := config.Load()
 
-	// Connect to PostgreSQL database
+	// Подключение к базе данных PostgreSQL
 	db, err := sql.Open("postgres", cfg.DatabaseURL)
 	if err != nil {
-		log.Fatal("Database connection error:", err)
+		log.Fatal("Ошибка подключения к БД:", err)
 	}
 	defer db.Close()
 
-	// Initialize repository, usecase and HTTP handler
+	// Инициализация репозитория, usecase и HTTP-обработчика
 	userRepo := repository.NewUserRepository(db)
-	userUC := usecase.NewUserUsecase(userRepo)
+	userUC := usecase.NewUserUsecase(userRepo, cfg.JWTSecret)
 	handler := httpDelivery.NewHandler(userUC)
 
-	// Initialize Gin
+	// Инициализация Gin
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "http://localhost:5173"}, // Разрешить фронтенд
+		AllowOrigins:     []string{"http://localhost:3000", "http://localhost:5173"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -43,16 +43,15 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	// Public routes
+	// Публичные маршруты
 	router.POST("/signup", handler.Register)
 	router.POST("/login", handler.Login)
 
-	// Protected routes with JWT middleware
+	// Защищённые маршруты (JWT middleware)
 	protected := router.Group("/")
-	protected.Use(httpDelivery.AuthMiddleware())
+	protected.Use(httpDelivery.AuthMiddleware(cfg.JWTSecret))
 	protected.GET("/profile", handler.Profile)
 
-	// Start server
-	log.Println("Server is running on port", cfg.Port)
+	log.Println("Сервер запущен на порту", cfg.Port)
 	router.Run(":" + cfg.Port)
 }
