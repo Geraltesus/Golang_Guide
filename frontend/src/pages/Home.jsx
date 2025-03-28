@@ -14,9 +14,6 @@ export default function Home() {
         <div className="titleContainer">
           <h1>How to Build a Backend for Golang?</h1>
         </div>
-        <div className="timerContainer">
-          <span>35min</span>
-        </div>
         <div className="thingContainer">
           <h2>Введение</h2>
           <p>
@@ -44,7 +41,10 @@ export default function Home() {
 
           <h2>Предварительные требования</h2>
           <ul>
-            <li>Учетная запись Back4App Зарегистрируйтесь бесплатно здесь.</li>
+            <li>Учетная запись Back4App Зарегистрируйтесь бесплатно <a href="https://www.back4app.com" target="_blank" rel="noopener noreferrer">здесь</a>.</li>
+            <li>
+            <a href="https://www.back4app.com/docs/get-started/new-parse-app" target="_blank" rel="noopener noreferrer">Новый проект Back4App</a>
+            </li>
           </ul>
         </div>
       </div>
