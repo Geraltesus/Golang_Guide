@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useLogOut } from "./useLogout";
+import { useNavigate } from "react-router-dom";
 
 export function HeaderIned() {
   return (
@@ -17,9 +19,15 @@ export function HeaderIned() {
 }
 
 export function HeaderOuted() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user?.token;
+  const navigate = useNavigate();
+  const { logOut } = useLogOut();
+
   async function handleLogOut() {
     await logOut(token);
     navigate("/");
+    window.location.reload();
   }
   return (
     <div className="headerContainer">
@@ -29,7 +37,8 @@ export function HeaderOuted() {
 
       <div className="buttonsContainer">
         <Link to="/profile">Profile</Link>
-        <a onClick={handleLogOut}>Log Out</a>
+        <br />
+        <Link onClick={handleLogOut}>Log Out</Link>
       </div>
     </div>
   );
