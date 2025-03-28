@@ -1,3 +1,16 @@
+.common-image {
+    width: 800px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.code pre {
+    width: 800px;
+    white-space: pre-wrap; /* Перенос строк */
+    word-wrap: break-word; /* Перенос длинных слов */
+    margin: 0 auto; /* Центрирование блока */
+  }
+
 .contentContainer {
     max-width: 820px;
     margin: 0 auto;
