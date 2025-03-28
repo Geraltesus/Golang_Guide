@@ -42,6 +42,9 @@ importers:
       globals:
         specifier: ^15.15.0
         version: 15.15.0
+      rollup:
+        specifier: ^4.37.0
+        version: 4.37.0
       vite:
         specifier: ^6.2.0
         version: 6.2.3
