@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { HeaderIned, HeaderOuted } from "../components/Header";
+import '../styles/Home.css'
 
 export default function Home() {
   const user = JSON.parse(localStorage.getItem("user"));

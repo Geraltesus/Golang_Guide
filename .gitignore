@@ -1,29 +1,77 @@
 # Бинарные файлы, скомпилированные артефакты
 /bin/
 /build/
+/dist/
 main
+*.exe
+*.dll
+*.so
+*.dylib
 
 # Файлы зависимостей Go
 /vendor/
+*.test
+/go.work
 
 # Файлы настроек IDE
 .idea/
 *.sublime-workspace
 *.sublime-project
 .vscode/
+*.swp
+*.swo
+*~
 
-# Логи
+# Логи и отладка
 *.log
+debug
+debug.test
+coverage.txt
+coverage.html
 
 # Файлы системы
 .DS_Store
 Thumbs.db
+.directory
+desktop.ini
 
 # Файлы окружения
 .env
+.env.*
+!.env.example
 
 # Файлы Docker
 docker-compose.override.yml
+.docker/
+*.env.docker
 
-# Кэш сборки
+# Кэш и временные файлы
 /tmp/
+*.tmp
+.cache/
+__debug_bin
+*.out
+
+# Тестовые файлы
+test.db
+*.test.db
+testdata/
+
+# Node.js (если используется для фронтенда)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Сертификаты и ключи
+*.pem
+*.key
+*.crt
+*.csr
+*.cert
+
+# Локальные конфигурации
+config.local.yaml
+*.local.yml
+*.local.yaml
