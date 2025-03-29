@@ -1,3 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import "tailwindcss";
+
+
+* {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;  
+    font-style: normal;
+}
+
+Link {
+    border: #333;
+    border-radius: 1px;
+}
+
 .common-image {
     width: 800px;
     margin-left: 10px;
